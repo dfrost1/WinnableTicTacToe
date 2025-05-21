@@ -7,11 +7,14 @@ namespace AdultTicTacToe
     {
         private char currentPlayer = 'X';
         private Button[,] buttons = new Button[3, 3];
+        int xPlayerScore = 0;
+        int oPlayerScore = 0;
 
         public TicTacToeForm()
         {
             InitializeComponent();
             CreateBoard();
+            UpdateScoreLabels();
         }
 
         private void CreateBoard()
@@ -46,6 +49,15 @@ namespace AdultTicTacToe
                 if (CheckWinner())
                 {
                     MessageBox.Show($"Player {currentPlayer} wins!");
+                    if (currentPlayer == 'X')
+                    {
+                        xPlayerScore += 1;
+                    }
+                    else
+                    {
+                        oPlayerScore += 1;
+                    }
+                    UpdateScoreLabels();
                     ResetBoard();
                 }
                 else if (IsDraw())
@@ -109,6 +121,11 @@ namespace AdultTicTacToe
                 btn.Enabled = true;
             }
             currentPlayer = 'X';
+        }
+        private void UpdateScoreLabels()
+        {
+            labelScorePlayerX.Text = "Player X Score: " + xPlayerScore.ToString();
+            labelScorePlayerO.Text = "Player O Score: " + oPlayerScore.ToString();
         }
     }
 }
