@@ -35,18 +35,20 @@
             // labelScorePlayerX
             // 
             this.labelScorePlayerX.AutoSize = true;
+            this.labelScorePlayerX.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.labelScorePlayerX.Location = new System.Drawing.Point(555, 9);
             this.labelScorePlayerX.Name = "labelScorePlayerX";
-            this.labelScorePlayerX.Size = new System.Drawing.Size(109, 16);
+            this.labelScorePlayerX.Size = new System.Drawing.Size(199, 29);
             this.labelScorePlayerX.TabIndex = 0;
             this.labelScorePlayerX.Text = "Player X Score: 0";
             // 
             // labelScorePlayerO
             // 
             this.labelScorePlayerO.AutoSize = true;
+            this.labelScorePlayerO.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.labelScorePlayerO.Location = new System.Drawing.Point(555, 34);
             this.labelScorePlayerO.Name = "labelScorePlayerO";
-            this.labelScorePlayerO.Size = new System.Drawing.Size(111, 16);
+            this.labelScorePlayerO.Size = new System.Drawing.Size(201, 29);
             this.labelScorePlayerO.TabIndex = 1;
             this.labelScorePlayerO.Text = "Player O Score: 0";
             // 
@@ -58,7 +60,6 @@
             this.Controls.Add(this.labelScorePlayerO);
             this.Controls.Add(this.labelScorePlayerX);
             this.Name = "TicTacToeForm";
-            this.Text = "TicTacToe";
             this.ResumeLayout(false);
             this.PerformLayout();
 

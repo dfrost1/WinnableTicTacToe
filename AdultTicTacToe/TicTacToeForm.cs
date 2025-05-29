@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace AdultTicTacToe
@@ -9,6 +10,7 @@ namespace AdultTicTacToe
         private Button[,] buttons = new Button[3, 3];
         int xPlayerScore = 0;
         int oPlayerScore = 0;
+        private TableLayoutPanel table;
 
         public TicTacToeForm()
         {
@@ -19,23 +21,43 @@ namespace AdultTicTacToe
 
         private void CreateBoard()
         {
-            int size = 100;
+            //prevent collapse
+            this.MinimumSize = new System.Drawing.Size(350, 450);
+            this.Text = "Tic Tac Toe";
 
+            //initialise table
+            table = new TableLayoutPanel();
+            table.RowCount = 3;
+            table.ColumnCount = 3;
+            table.Dock = DockStyle.Fill;
+            table.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            
+            //add buttons using 2 dimensional array
             for (int i = 0; i < 3; i++)
             {
+                table.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33f));
+                table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
                 for (int j = 0; j < 3; j++)
                 {
                     Button btn = new Button();
-                    btn.Font = new System.Drawing.Font("Arial", 24);
-                    btn.Width = size;
-                    btn.Height = size;
-                    btn.Left = j * size;
-                    btn.Top = i * size;
-                    btn.Click += new EventHandler(Button_Click);
+                    btn.Dock = DockStyle.Fill;
+                    btn.Font = new System.Drawing.Font("Arial", 36, System.Drawing.FontStyle.Bold);
+                    btn.Click += Button_Click;
                     buttons[i, j] = btn;
-                    Controls.Add(btn);
+                    table.Controls.Add(btn, j, i);
                 }
             }
+
+            // add labels for scoring
+            FlowLayoutPanel labelPanel = new FlowLayoutPanel();
+            labelPanel.Dock = DockStyle.Top;
+            labelPanel.Height = 50;
+            labelPanel.Padding = new Padding(10);
+            labelPanel.Controls.Add(labelScorePlayerX);
+            labelPanel.Controls.Add(labelScorePlayerO);
+
+            this.Controls.Add(table);
+            this.Controls.Add(labelPanel);
         }
 
         private void Button_Click(object sender, EventArgs e)
@@ -45,6 +67,7 @@ namespace AdultTicTacToe
             {
                 btn.Text = currentPlayer.ToString();
                 btn.Enabled = false;
+                btn.BackColor = currentPlayer == 'X' ?  Color.Red : Color.DarkTurquoise;
 
                 if (CheckWinner())
                 {
@@ -67,7 +90,7 @@ namespace AdultTicTacToe
                 }
                 else
                 {
-                    currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+                    currentPlayer = currentPlayer == 'X' ? 'O' : 'X';
                 }
             }
         }
@@ -119,6 +142,7 @@ namespace AdultTicTacToe
             {
                 btn.Text = "";
                 btn.Enabled = true;
+                btn.BackColor = Color.White;
             }
             currentPlayer = 'X';
         }
