@@ -10,7 +10,11 @@ namespace AdultTicTacToe
         private Button[,] buttons = new Button[3, 3];
         int xPlayerScore = 0;
         int oPlayerScore = 0;
+        int xPlayerMovesCount = 0;
+        int oPlayerMovesCount = 0;
         private TableLayoutPanel table;
+        LimitedDictionary<int, int[]> xPlayerDict = new LimitedDictionary<int, int[]>(4);
+        LimitedDictionary<int, int[]> oPlayerDict = new LimitedDictionary<int, int[]>(4);
 
         public TicTacToeForm()
         {
@@ -40,35 +44,42 @@ namespace AdultTicTacToe
                 for (int j = 0; j < 3; j++)
                 {
                     Button btn = new Button();
+                    int[] buttonPositionArray = { i, j };
                     btn.Dock = DockStyle.Fill;
                     btn.Font = new System.Drawing.Font("Arial", 36, System.Drawing.FontStyle.Bold);
-                    btn.Click += Button_Click;
+                    btn.Click += (sender, e) => Button_Click(sender, e, buttonPositionArray); //delegate
                     buttons[i, j] = btn;
                     table.Controls.Add(btn, j, i);
                 }
             }
-
-            // add labels for scoring
-            FlowLayoutPanel labelPanel = new FlowLayoutPanel();
-            labelPanel.Dock = DockStyle.Top;
-            labelPanel.Height = 50;
-            labelPanel.Padding = new Padding(10);
-            labelPanel.Controls.Add(labelScorePlayerX);
-            labelPanel.Controls.Add(labelScorePlayerO);
-
+            ;
             this.Controls.Add(table);
-            this.Controls.Add(labelPanel);
+            this.Controls.Add(AddLabels());
         }
 
-        private void Button_Click(object sender, EventArgs e)
+        private void Button_Click(object sender, EventArgs e, int[] buttonPosition)
         {
             Button btn = sender as Button;
             if (btn.Text == "")
             {
                 btn.Text = currentPlayer.ToString();
                 btn.Enabled = false;
-                btn.BackColor = currentPlayer == 'X' ?  Color.Red : Color.DarkTurquoise;
+                if (currentPlayer == 'X') {
+                    xPlayerMovesCount++;
+                    btn.BackColor = Color.Red;
+                    int xCurrentDictionaryKey = xPlayerMovesCount % 4; // key of dict
+                    xPlayerDict.Add(xCurrentDictionaryKey, buttonPosition);
+                    ResetButton(xPlayerDict, xPlayerMovesCount, xCurrentDictionaryKey);
+                    Console.WriteLine(xCurrentDictionaryKey);
+                } else
+                {
+                    oPlayerMovesCount++;
+                    btn.BackColor = Color.DarkTurquoise;
+                    int oTurnDiff = xPlayerMovesCount % 4;
+                    oPlayerDict.Add(oTurnDiff, buttonPosition);
+                    ResetButton(oPlayerDict, oPlayerMovesCount, oTurnDiff);
 
+                }
                 if (CheckWinner())
                 {
                     MessageBox.Show($"Player {currentPlayer} wins!");
@@ -90,7 +101,14 @@ namespace AdultTicTacToe
                 }
                 else
                 {
-                    currentPlayer = currentPlayer == 'X' ? 'O' : 'X';
+                    if (currentPlayer == 'X')
+                    {
+                        currentPlayer = 'O';
+                    }
+                    else
+                    {
+                        currentPlayer = 'X';
+                    }
                 }
             }
         }
@@ -151,5 +169,36 @@ namespace AdultTicTacToe
             labelScorePlayerX.Text = "Player X Score: " + xPlayerScore.ToString();
             labelScorePlayerO.Text = "Player O Score: " + oPlayerScore.ToString();
         }
+
+        private FlowLayoutPanel AddLabels()
+        {
+            // add labels for scoring
+            FlowLayoutPanel labelPanel = new FlowLayoutPanel();
+            labelPanel.Dock = DockStyle.Top;
+            labelPanel.Height = 50;
+            labelPanel.Padding = new Padding(10);
+            labelPanel.Controls.Add(labelScorePlayerX);
+            labelPanel.Controls.Add(labelScorePlayerO);
+            return labelPanel;
+        }
+
+        private void ResetButton(LimitedDictionary<int, int[]> playerDictionary, int playerMovesCount, int currentDictionaryKey)
+        {
+
+            if (playerMovesCount >= 4)
+            {
+                if (currentDictionaryKey >= 3)
+                {
+                    currentDictionaryKey = currentDictionaryKey + 1 > 3 ? -1 : 0; // loops over to next key in dictionary 
+                }
+                var buttonDictionaryHolder = buttons[playerDictionary[currentDictionaryKey+1][0], playerDictionary[currentDictionaryKey+1][1]]; //grabs next in dictionary by looping over
+
+                buttonDictionaryHolder.Enabled = true;
+                buttonDictionaryHolder.Text = "";
+                buttonDictionaryHolder.Enabled = true;
+                buttonDictionaryHolder.BackColor = Color.White;
+            }
+        }
+
     }
 }
