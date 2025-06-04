@@ -163,6 +163,10 @@ namespace AdultTicTacToe
                 btn.BackColor = Color.White;
             }
             currentPlayer = 'X';
+            xPlayerMovesCount = 0;
+            oPlayerMovesCount = 0;
+            xPlayerDict = new LimitedDictionary<int, int[]>(4);
+            oPlayerDict = new LimitedDictionary<int, int[]>(4);
         }
         private void UpdateScoreLabels()
         {
