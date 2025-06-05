@@ -30,7 +30,18 @@ This is a custom implementation of the classic Tic Tac Toe game in C#, where eac
 - .NET Framework 4.7.2 or higher (or your chosen target version)
 
 ### Steps
+1. Download .exe file under release section
+
+OR 
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/tictactoe-rolling.git
+    ```bash
+   https://github.com/dfrost1/WinnableTicTacToe.git
+    
+2. Run project
+
+  Enjoy!
+   
+   
+
+   
